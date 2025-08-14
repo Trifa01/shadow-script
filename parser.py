@@ -8,9 +8,14 @@ class Parser:
         if self.idx < len(self.tokens):
             self.token = self.tokens[self.idx]
     
+    # <factor> := ( <expr> )
     def factor(self):
         if self.token.type == "INT" or self.token.type == "FLOAT":
             return self.token
+        if self.token.value == "(":
+            self.move()
+            expression = self.expression()
+            return expression 
     
     def term(self):
         left_node = self.factor()
