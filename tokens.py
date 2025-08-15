@@ -16,8 +16,10 @@ class Operation(Token):
     def __init__(self, value):
         super().__init__("OP", value)
     
-if __name__ == '__main__':
-    s = "5.4+3"
-    Lexer(s).tokenize()
-    token = Token("INT", 1)
-    integer = Integer(1)
+class Declaration(Token):
+    def __init__(self, value):
+        super().__init__("DECL", value)
+
+class Variable(Token):
+    def __init__(self, value):
+        super().__init__("VAR(?)", value)

@@ -15,7 +15,9 @@ class Parser:
         if self.token.value == "(":
             self.move()
             expression = self.expression()
-            return expression 
+            return expression
+        if self.token.type.startswith("VAR"):
+            return self.token 
     
     def term(self):
         left_node = self.factor()
@@ -39,6 +41,24 @@ class Parser:
             output = [left_node, operation, right_node]
         return output
     
+    def variable(self):
+        if self.token.type.startswith("VAR"):
+            return self.token
+    
+    def statement(self):
+        if self.token.type == "DECL": 
+            self.move()
+            left_node = self.variable()
+            self.move()
+            if self.token.value == "=":
+                operation = self.token 
+                self.move()
+                right_node = self.expression()
+            return [left_node, operation, right_node]
+            # var assignment
+        elif self.token.type == "INT" or self.token.type == "FLOAT" or self.token.type == "OP": 
+            # Arithmetic expression
+            self.expression()
 
     def parse(self):
-        return self.expression()
+        return self.statement()

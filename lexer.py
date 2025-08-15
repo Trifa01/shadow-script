@@ -1,8 +1,10 @@
-from tokens import Integer, Float, Operation
+from tokens import Integer, Float, Operation, Declaration, Variable
 class Lexer:
     digits = "0123456789"
-    operations = "+/*-()"
+    operations = "+/*-()="
     stopwords = " "
+    letters = "abcdefghijklmnpqrstuvwxyz"
+    declerations = ["make"]
     def __init__(self, text):
         self.text = text
         self.idx = 0 
@@ -22,10 +24,24 @@ class Lexer:
             elif self.char in Lexer.stopwords:
                 self.move()  
                 continue # do not append to tokens for this iteration
+            
+            elif self.char in Lexer.letters:
+                word = self.extract_word()
+                if word in Lexer.declerations:
+                    self.token = Declaration(word)
+                else:
+                    self.token = Variable(word)
 
             self.tokens.append(self.token)
 
         return self.tokens
+    
+    def extract_word(self):
+        word = ""
+        while self.idx < len(self.text) and self.char in Lexer.letters:
+            word += self.char
+            self.move()
+        return word 
 
     def extract_number(self):
         number = ""
